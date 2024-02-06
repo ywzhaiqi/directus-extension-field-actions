@@ -1,5 +1,5 @@
 {
-  "name": "directus-extension-field-actions",
+  "name": "@ywzhaiqi/directus-extension-field-actions",
   "version": "1.6.6",
   "type": "module",
   "directus:extension": {
@@ -27,12 +27,11 @@
     "build": "directus-extension build",
     "dev": "directus-extension build -w --no-minify",
     "link": "directus-extension link",
-    "add": "directus-extension add",
-    "test": "echo \\\"No test specified\\\" && exit 0"
+    "add": "directus-extension add"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/utomic-media/directus-extension-field-actions.git"
+    "url": "https://github.com/ywzhaiqi/directus-extension-field-actions.git"
   },
   "keywords": [
     "directus",
@@ -47,11 +46,12 @@
   "author": "Dominic Marcelino | Utomic Media",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/utomic-media/directus-extension-field-actions/issues"
+    "url": "https://github.com/ywzhaiqi/directus-extension-field-actions/issues"
   },
-  "homepage": "https://github.com/utomic-media/directus-extension-field-actions.git#readme",
+  "homepage": "https://github.com/ywzhaiqi/directus-extension-field-actions.git#readme",
   "devDependencies": {
     "@directus/extensions-sdk": "^10.2.0",
+    "@directus/shared": "^9.24.0",
     "sass": "^1.69.5",
     "sass-loader": "^13.3.2",
     "typescript": "^5.3.2",
@@ -59,5 +59,8 @@
   },
   "files": [
     "dist/**/*"
-  ]
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.com"
+  }
 }

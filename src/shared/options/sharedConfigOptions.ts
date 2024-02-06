@@ -129,7 +129,7 @@ export function getSharedConfigOptions(isString: boolean) {
       name: 'Link value prefix',
       type: 'string',
       meta: {
-        width: 'half',
+        width: 'full',
         interface: 'select-dropdown',
         options: {
           placeholder: 'Enter prefix or select variable',

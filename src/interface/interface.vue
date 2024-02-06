@@ -61,10 +61,11 @@
 			</a>
 		</v-button>
 	</div>
+	<v-notice v-if="errorMsg" type="danger">{{ errorMsg }}</v-notice>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ComputedRef, computed, inject, ref } from 'vue';
 import { useClipboard } from '../shared/composable/use-clipboard';
 import { usePrefixedValues } from '../shared/composable/use-prefixed-values';
 import { useStores } from '@directus/extensions-sdk';
@@ -148,8 +149,10 @@ const { isCopySupported, copyToClipboard } = useClipboard();
 const { useNotificationsStore } = useStores();
 const notificationStore = useNotificationsStore();	
 
-const { computedLink, computedCopyValue } = usePrefixedValues(props);
-
+// use to compute the link and copy value with the prefix
+const values = inject<ComputedRef<Record<string, any>>>('values')!;
+const errorMsg = ref<string | null>(null);
+const { computedLink, computedCopyValue } = usePrefixedValues(props, values, errorMsg);
 
 const inputType = computed(() => {
 	if (['bigInteger', 'integer', 'float', 'decimal'].includes(props.type)) return 'number';

@@ -13,6 +13,10 @@
 
 <br />
 
+## Modified
+
+- prefix support: `return \`https://www.google.com/${id}\``. Right now only work interface
+
 ## ✨ Supports
 ### 📋 Copy action
 Each value can be copied by a custom button. If enabled it's also possible to copy a value by just clickung on it (click-action)
