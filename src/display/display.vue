@@ -62,7 +62,7 @@
 
 
 <script setup lang="ts">
-import { ComputedRef, computed, inject, ref, watch } from 'vue';
+import { ComputedRef, computed, inject, ref } from 'vue';
 import { useClipboard } from '../shared/composable/use-clipboard';
 import { usePrefixedValues } from '../shared/composable/use-prefixed-values';
 import { useStores } from '@directus/extensions-sdk';
