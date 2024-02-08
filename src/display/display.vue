@@ -3,7 +3,7 @@
 	<span v-else class="action-display">
 		<component
 			v-if="!hideFieldValue"
-			:is="(clickAction === 'link') ? 'a' : 'span'" 
+			:is="(clickAction === 'link' && isLinkValid) ? 'a' : 'span'" 
 			class="dynamic-wrapper"
 			:href="computedLink"
 			v-tooltip.left="actionTooltip"
@@ -11,7 +11,7 @@
 			rel="noopener noreferrer"
 		>
 			<span 
-				:class="hasValueClickAction ? 'action-background' : ''"
+				:class="hasValueClickAction && isLinkValid ? 'action-background' : ''"
 				@click="valueClickAction"
 			>
 				{{ value }}
@@ -55,14 +55,14 @@
 			<span v-if="linkButtonLabel" class="ml-2">{{ linkButtonLabel }}</span>
 		</component>
 	</span>
-	<v-notice v-if="errorMsg" type="danger">{{ errorMsg }}</v-notice>
+	<!-- <v-notice v-if="errorMsg" type="danger">{{ errorMsg }}</v-notice> -->
 </template>
 
 
 
 
 <script setup lang="ts">
-import { ComputedRef, computed, inject, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useClipboard } from '../shared/composable/use-clipboard';
 import { usePrefixedValues } from '../shared/composable/use-prefixed-values';
 import { useStores } from '@directus/extensions-sdk';
@@ -70,6 +70,10 @@ import { useStores } from '@directus/extensions-sdk';
 const props = defineProps({
 	value: {
 		type: String,
+		default: null,
+	},
+	item: {
+		type: Object,
 		default: null,
 	},
 	type: {
@@ -132,11 +136,18 @@ const { isCopySupported, copyToClipboard } = useClipboard();
 const { useNotificationsStore } = useStores();
 const notificationStore = useNotificationsStore();	
 
-// undefined
-const values = inject<ComputedRef<Record<string, any>>>('values')!
+// 需要用我修改过的 app，否则为 undefined
+const values = computed(() => props.item)
 const errorMsg = ref<string | null>(null);
 const { computedLink, computedCopyValue } = usePrefixedValues(props, values, errorMsg);
 
+const isLinkValid = computed(() => {
+	if (!computedLink.value) return false;
+	if (computedLink.value.startsWith('http')) return true;
+	if (computedLink.value.startsWith('mailto')) return true;
+	if (computedLink.value.startsWith('tel:')) return true;
+	return false;
+});
 
 async function copyValue() {
 	await copyToClipboard(computedCopyValue.value, notificationStore);
@@ -150,7 +161,7 @@ function valueClickAction(e: Event) {
 		copyValue();
 	} 
 
-	if (props.clickAction === 'link') {
+	if (props.clickAction === 'link' && isLinkValid.value) {
 		// We opened a link in a new tab and don't want to get into the details view of the item
 		e.stopPropagation();
 	}
@@ -170,7 +181,7 @@ const hasValueClickAction = computed(() => {
 // TODO: move in composable (together with display)
 const actionTooltip = computed(() => {
 	if (props.clickAction === 'copy' && isCopySupported) return 'Copy value';
-	if (props.clickAction === 'link') return 'Open link';
+	if (props.clickAction === 'link' && isLinkValid.value) return 'Open link';
 });
 
 </script>
